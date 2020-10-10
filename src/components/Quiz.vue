@@ -1,25 +1,57 @@
 <template>
   <div class="container mt-3">
-    <div class="widget">
-      <div class="widget-img">
-        <img :src="item.image" alt="who" />
+    <div class="row">
+      <!--Left-->
+      <div class="col-md-4">
+        <h1>Game Info</h1>
+        <table class="table table-borderless my-3">
+          <tbody>
+            <tr>
+              <th class="pl-0 w-25" scope="row">Player:</th>
+              <td>{{ playerName || "Guest" }}</td>
+            </tr>
+            <tr>
+              <th class="pl-0 w-25" scope="row">Score:</th>
+              <td>{{ score }}</td>
+            </tr>
+            <tr>
+              <th class="pl-0 w-25" scope="row">Progress:</th>
+              <td>{{ progress }} / {{ totalMoves }}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="widget-content">
+
+      <!--Right-->
+      <div class="col-md-8">
+        <div id="counter">
+          <img
+            src="@/assets/images/background.png"
+            alt="bg"
+            class="img-responsive"
+          />
+          <img
+            :src="currentPokemon.image"
+            alt="pokemon"
+            id="over"
+            :class="{ 'img-responsive': true, 'hide-pokemon': hidePokemon }"
+          />
+        </div>
         <div class="quiz">
-          <!-- :class="{ active: i === activeItem}" -->
           <div
             class="quiz-item"
-            v-for="item in options"
-            :key="item"
-            @click.prevent="validateMove(item)"
-            :class="{ 'quiz-item-success': item == selected }"
+            v-for="item in randomPokemonsList"
+            :key="item.id"
+            @click.prevent="validateMove(item.id)"
+            :class="{
+              'quiz-item-success':
+                item.id == currentPokemon.id && showCorrectAnswer,
+            }"
           >
-            {{ item }}
+            {{ item.name }}
           </div>
         </div>
       </div>
-      {{ isCorrect }}
-      {{ current }}
     </div>
   </div>
 </template>
@@ -31,39 +63,73 @@ import * as pokemon from "@/services/pokemon.service";
 export default {
   data() {
     return {
-      item: {},
-      current: "",
-      options: [],
-      selected: "",
-      isCorrect: false,
+      currentPokemon: {},
+      randomPokemonsId: [],
+      randomPokemonsList: [],
+      hidePokemon: true,
+      showCorrectAnswer: false,
     };
   },
 
   created() {
+    this.prepareQuiz();
     this.startGame();
   },
 
+  computed: {
+    playerName() {
+      return this.$store.state.quiz.playerName;
+    },
+
+    score() {
+      return this.$store.state.quiz.score;
+    },
+
+    progress() {
+      return this.$store.state.quiz.progress;
+    },
+
+    totalMoves() {
+      return this.$store.state.quiz.totalMoves;
+    },
+  },
+
   methods: {
+    prepareQuiz() {
+      this.randomPokemonsId = pokemon.getRandomPokemons();
+    },
+
     startGame() {
-      let randomPokemonsId = pokemon.getRandomPokemons();
-      this.setCurrentPokemon(randomPokemonsId[0]);
-      this.getPokemonById(this.current);
-      this.options = pokemon.getRandomPokemonList(this.item.name);
+      this.currentPokemon = pokemon.getPokemonById(
+        this.randomPokemonsId[this.progress]
+      );
+      this.randomPokemonsList = pokemon.getRandomPokemonList(
+        this.currentPokemon
+      );
+      this.$store.dispatch("increaseProgress", this.progress + 1);
     },
 
-    setCurrentPokemon(id) {
-      this.current = id;
+    validateMove(id) {
+      let isCorrect = pokemon.validateMove(this.currentPokemon.id, id);
+      this.hidePokemon = false;
+      this.showCorrectAnswer = true;
+
+      if (isCorrect) {
+        this.$store.dispatch("increaseScore", this.score + 1);
+      }
+      this.nextQuiz();
     },
 
-    getPokemonById(id) {
-      this.item = pokemon.getPokemonById(id);
-    },
-
-    validateMove(item) {
-      this.isCorrect = pokemon.validateMove(item, this.item.name);
-      this.item.name;
-
-      //   if (this.isCorrect) this.selected = item;
+    nextQuiz() {
+      if (this.progress === this.totalMoves) {
+        this.$router.push({ name: "game-over" });
+      } else {
+        setTimeout(() => {
+          this.hidePokemon = true;
+          this.showCorrectAnswer = false;
+          this.startGame();
+        }, 2000);
+      }
     },
   },
 };

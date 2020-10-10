@@ -3,7 +3,7 @@
     <div class="container">
       <a href="/">
         <div class="logo">
-          <img src="@/assets/pokemon-logo.png" />
+          <img src="@/assets/images/pokemon-logo.png" />
         </div>
       </a>
     </div>

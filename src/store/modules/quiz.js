@@ -1,35 +1,44 @@
 export default {
     state: {
-        player: "",
+        playerName: "",
         score: 0,
-        totalMoves: 5
+        progress: 0,
+        totalMoves: 5,
     },
 
     mutations: {
-        SET_USER(state, payload) {
-            state.user = payload;
+        SET_PLAYER_NAME(state, payload) {
+            state.playerName = payload;
+        },
+
+        SET_SCORE(state, payload) {
+            state.score = payload;
+        },
+
+        SET_PROGRESS(state, payload) {
+            state.progress = payload;
         }
     },
 
-    getters: {},
+    getters: {
+        failedMoves: (state) => {
+            let failed = state.totalMoves - state.score;
+            return failed > 0 ? failed : 0;
+        }
+    },
 
     actions: {
-        // getClassicPokemons(context) {
-        //     return new Promise((resolve, reject) => {
-        //         return axios.get(`https://pokeapi.co/api/v2/pokemon?limit=151`)
-        //             .then(() => resolve())
-        //             .catch(error => reject(handleErrorResponse(error)));
-        //     });
-        // },
 
-        // https://pokeres.bastionbot.org/images/pokemon/152.png
+        setPlayerName(context, playerName) {
+            context.commit("SET_PLAYER_NAME", playerName);
+        },
 
-        // getPokemonById(context, id) {
-        //     return new Promise((resolve, reject) => {
-        //         return axios.get();
-        //             .then(() => resolve())
-        //             .catch(error => reject(handleErrorResponse(error)));
-        //     });
-        // },
+        increaseScore(context, payload) {
+            context.commit("SET_SCORE", payload);
+        },
+
+        increaseProgress(context, payload) {
+            context.commit("SET_PROGRESS", payload);
+        }
     }
 };

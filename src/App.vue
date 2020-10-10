@@ -1,19 +1,32 @@
 <template>
   <div id="app">
     <header-component></header-component>
-
-    <quiz-component></quiz-component>
+    <transition name="fade">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
 <script>
 import HeaderComponent from "@/components/Header";
-import QuizComponent from "@/components/Quiz";
 
 export default {
   components: {
     HeaderComponent,
-    QuizComponent,
   },
 };
 </script>
+
+<style>
+#app {
+  font-family: "pokemon", Helvetica;
+}
+
+@font-face {
+  font-family: "pokemon";
+  src: local("pokemon"), local("pokemon-solid"),
+    url("./assets/fonts/pokemon/pokemon-solid.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+</style>

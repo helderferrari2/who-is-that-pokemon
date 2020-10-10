@@ -1,0 +1,17 @@
+h1 {
+  -webkit-text-stroke: 2px $primary;
+  color: $warning;
+  font-size: 2em;
+}
+
+th {
+  -webkit-text-stroke: 1px $primary;
+  color: $warning;
+  font-weight: 100;
+  font-size: 1.5em;
+}
+
+td {
+  font-weight: 100;
+  font-size: 1.5em;
+}

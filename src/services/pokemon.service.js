@@ -21,35 +21,49 @@ export const getPokemonById = (id) => {
 }
 
 export const getRandomPokemonList = (current) => {
-    let list = getPokemonRandomNames();
-    let array = appendCurrentPokemonNameToRandomList(current, list);
-    return sufflePokemonRandomNames(array);
+    let array = getPokemonRandomNames(current);
+    return shufflePokemonList(array);
 }
 
-export const getPokemonRandomNames = () => {
-    let names = pokemons.items.map(item => item.name);
-    let data = []
+export const getPokemonRandomNames = (current) => {
 
-    for (let i = 0; i < 3; i++) {
-        let pokemonName = names[Math.floor(Math.random() * names.length)];
-        data.push(pokemonName)
-    }
+    let data = []
+    data.push(current) //append current pokemon to list
+
+    let randomPokemonsId = getRandomPokemons();//get 5 random pokemons id
+    let randomPokemons = randomPokemonsId.map(item => getPokemonById(item)) // get pokemon object from random list
+
+    let limit = 4;
+    let count = 1;
+    randomPokemons.forEach(item => {
+        if (item.id != current.id && count < limit) {
+            data.push(item)
+        }
+        count++;
+    })
+
+    // let names = pokemons.items.map(item => item.name);
+    // let data = []
+
+    // data.push(current.name)
+
+    // for (let i = 0; i < 3; i++) {
+    //     let pokemonName = names[Math.floor(Math.random() * names.length)];
+    //     data.push(pokemonName)
+    // }
     return data;
 }
 
 
-export const appendCurrentPokemonNameToRandomList = (name, array) => {
-    array.push(name)
-    return array;
-}
 
 
-export const sufflePokemonRandomNames = (array) => {
+
+export const shufflePokemonList = (array) => {
     return array.sort(() => Math.random() - 0.5);
 }
 
-export const validateMove = (name, valid) => {
-    return name === valid
+export const validateMove = (current, selected) => {
+    return current === selected
 }
 
 
