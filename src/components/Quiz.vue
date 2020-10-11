@@ -2,33 +2,12 @@
   <div class="container mt-3">
     <div class="row">
       <!--Left-->
-      <div class="col-md-4">
-        <h1>Game Info</h1>
-        <table class="table table-borderless my-3">
-          <tbody>
-            <tr>
-              <th class="pl-0 w-25" scope="row">Player:</th>
-              <td>{{ playerName || "Guest" }}</td>
-            </tr>
-            <tr>
-              <th class="pl-0 w-25" scope="row">Score:</th>
-              <td>{{ score }}</td>
-            </tr>
-            <tr>
-              <th class="pl-0 w-25" scope="row">Progress:</th>
-              <td>{{ progress }} / {{ totalMoves }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!--Right-->
       <div class="col-md-8">
         <transition name="fade">
           <div v-if="allDataIsReady">
             <div id="counter">
               <img
-                src="@/assets/images/background.png"
+                src="@/assets/images/background-min.png"
                 alt="bg"
                 class="img-responsive"
               />
@@ -55,6 +34,29 @@
             </div>
           </div>
         </transition>
+      </div>
+
+      <!--Right-->
+      <div class="col-md-4">
+        <div class="score">
+          <h1>Game Info</h1>
+          <table class="table table-borderless my-3">
+            <tbody>
+              <tr>
+                <th class="pl-0 w-25" scope="row">Player:</th>
+                <td>{{ playerName || "Guest" }}</td>
+              </tr>
+              <tr>
+                <th class="pl-0 w-25" scope="row">Score:</th>
+                <td>{{ score }}</td>
+              </tr>
+              <tr>
+                <th class="pl-0 w-25" scope="row">Progress:</th>
+                <td>{{ progress }} / {{ totalMoves }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
