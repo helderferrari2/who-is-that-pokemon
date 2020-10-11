@@ -2,6 +2,10 @@
 
 A simple pokemon quiz made using vuejs.
 
+#Screenhots
+![Screenshot](1.png)
+
+
 ## Project setup
 
 ```
