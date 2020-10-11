@@ -24,38 +24,41 @@
 
       <!--Right-->
       <div class="col-md-8">
-        <div id="counter">
-          <img
-            src="@/assets/images/background.png"
-            alt="bg"
-            class="img-responsive"
-          />
-          <img
-            :src="currentPokemon.image"
-            alt="pokemon"
-            id="over"
-            :class="{ 'img-responsive': true, 'hide-pokemon': hidePokemon }"
-          />
-        </div>
-        <div class="quiz">
-          <div
-            class="quiz-item"
-            v-for="item in randomPokemonsList"
-            :key="item.id"
-            @click.prevent="validateMove(item.id)"
-            :class="{
-              'quiz-item-success':
-                item.id == currentPokemon.id && showCorrectAnswer,
-            }"
-          >
-            {{ item.name }}
+        <transition name="fade">
+          <div v-if="allDataIsReady">
+            <div id="counter">
+              <img
+                src="@/assets/images/background.png"
+                alt="bg"
+                class="img-responsive"
+              />
+              <img
+                :src="currentPokemon.image"
+                alt="pokemon"
+                id="over"
+                :class="{ 'img-responsive': true, 'hide-pokemon': hidePokemon }"
+              />
+            </div>
+            <div class="quiz">
+              <div
+                class="quiz-item"
+                v-for="item in randomPokemonsList"
+                :key="item.id"
+                @click.once="validateMove(item.id)"
+                :class="{
+                  'quiz-item-success':
+                    item.id == currentPokemon.id && showCorrectAnswer,
+                }"
+              >
+                {{ item.name }}
+              </div>
+            </div>
           </div>
-        </div>
+        </transition>
       </div>
     </div>
   </div>
 </template>
-
 
 <script>
 import * as pokemon from "@/services/pokemon.service";
@@ -68,6 +71,7 @@ export default {
       randomPokemonsList: [],
       hidePokemon: true,
       showCorrectAnswer: false,
+      allDataIsReady: false,
     };
   },
 
@@ -100,13 +104,16 @@ export default {
     },
 
     startGame() {
-      this.currentPokemon = pokemon.getPokemonById(
-        this.randomPokemonsId[this.progress]
-      );
-      this.randomPokemonsList = pokemon.getRandomPokemonList(
-        this.currentPokemon
-      );
-      this.$store.dispatch("increaseProgress", this.progress + 1);
+      setTimeout(() => {
+        this.currentPokemon = pokemon.getPokemonById(
+          this.randomPokemonsId[this.progress]
+        );
+        this.randomPokemonsList = pokemon.getRandomPokemonList(
+          this.currentPokemon
+        );
+        this.$store.dispatch("increaseProgress", this.progress + 1);
+        this.allDataIsReady = true;
+      }, 1000);
     },
 
     validateMove(id) {
@@ -121,16 +128,33 @@ export default {
     },
 
     nextQuiz() {
-      if (this.progress === this.totalMoves) {
-        this.$router.push({ name: "game-over" });
-      } else {
-        setTimeout(() => {
-          this.hidePokemon = true;
-          this.showCorrectAnswer = false;
+      setTimeout(() => {
+        if (this.progress === this.totalMoves) {
+          this.$router.push({ name: "game-over" });
+        } else {
+          this.resetQuestion();
           this.startGame();
-        }, 2000);
-      }
+        }
+      }, 2000);
+    },
+
+    resetQuestion() {
+      this.hidePokemon = true;
+      this.showCorrectAnswer = false;
+      this.currentPokemon = {};
+      this.randomPokemonsList = [];
+      this.allDataIsReady = false;
     },
   },
 };
 </script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+</style>
