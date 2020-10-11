@@ -2,8 +2,9 @@
 
 A simple pokemon quiz made using vuejs.
 
-#Screenhots
-![Screenshot](1.png)
+# Screenshots
+![alt text](https://github.com/helderferrari2/who-is-that-pokemon/blob/main/screenshots/1.png?raw=true)
+
 
 
 ## Project setup
