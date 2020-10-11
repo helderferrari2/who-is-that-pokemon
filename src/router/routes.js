@@ -20,7 +20,8 @@ const routes = [
         path: "/game-over",
         name: "game-over",
         component: GameOver,
-    }
+    },
+    { path: '*', redirect: { name: 'start' } }
 ]
 
 
