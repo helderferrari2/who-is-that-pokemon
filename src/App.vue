@@ -1,28 +1,32 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <header-component></header-component>
+    <transition name="fade">
+      <router-view></router-view>
+    </transition>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import HeaderComponent from "@/components/Header";
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    HeaderComponent,
+  },
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  font-family: "pokemon", Helvetica;
+}
+
+@font-face {
+  font-family: "pokemon";
+  src: local("pokemon"), local("pokemon-solid"),
+    url("./assets/fonts/pokemon/pokemon-solid.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 </style>
