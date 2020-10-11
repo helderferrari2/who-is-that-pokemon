@@ -1,7 +1,7 @@
 <template>
   <div class="container pt-5">
     <div class="row align-items-center h-100">
-      <div class="col-6 mx-auto">
+      <div class="col-md-8 col-sm-12 mx-auto">
         <div class="card">
           <div class="card-body">
             <h1 class="card-title py-2 text-center">Player Info</h1>

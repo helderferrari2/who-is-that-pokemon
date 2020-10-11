@@ -76,3 +76,9 @@
   -webkit-filter: brightness(0) blur(0.8px);
   filter: brightness(0) blur(0.8px);
 }
+
+@media only screen and (max-width: 600px) {
+  .score {
+    display: none;
+  }
+}
