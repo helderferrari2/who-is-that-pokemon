@@ -129,7 +129,7 @@ export default {
         this.$store.dispatch("increaseProgress", this.progress + 1);
         this.allDataIsReady = true;
         this.disableQuiz = false;
-      }, 1000);
+      }, 2000);
     },
 
     validateMove(id) {
