@@ -41,31 +41,9 @@ export const getPokemonRandomNames = (current) => {
         }
         count++;
     })
-
-    // let names = pokemons.items.map(item => item.name);
-    // let data = []
-
-    // data.push(current.name)
-
-    // for (let i = 0; i < 3; i++) {
-    //     let pokemonName = names[Math.floor(Math.random() * names.length)];
-    //     data.push(pokemonName)
-    // }
     return data;
 }
 
+export const shufflePokemonList = (array) => array.sort(() => Math.random() - 0.5)
 
-
-
-
-export const shufflePokemonList = (array) => {
-    return array.sort(() => Math.random() - 0.5);
-}
-
-export const validateMove = (current, selected) => {
-    return current === selected
-}
-
-
-
-
+export const validateMove = (current, selected) => current === selected
