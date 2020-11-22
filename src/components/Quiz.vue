@@ -2,6 +2,29 @@
   <div class="container mt-3">
     <div class="row">
       <!--Left-->
+      <div class="col-md-4">
+        <div class="score">
+          <h1>Game Info</h1>
+          <table class="table table-borderless">
+            <tbody>
+              <tr>
+                <th class="pl-0 w-50" scope="row">Player:</th>
+                <td>{{ playerName || "Guest" }}</td>
+              </tr>
+              <tr>
+                <th class="pl-0 w-50" scope="row">Score:</th>
+                <td>{{ score }}</td>
+              </tr>
+              <tr>
+                <th class="pl-0 w-50" scope="row">Progress:</th>
+                <td>{{ progress }} / {{ totalMoves }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!--Right-->
       <div class="col-md-8">
         <transition name="fade">
           <div v-if="allDataIsReady">
@@ -18,7 +41,11 @@
                 :class="{ 'img-responsive': true, 'hide-pokemon': hidePokemon }"
               />
             </div>
-            <div class="quiz">
+
+            <div
+              :class="{ quiz: true, disableQuiz: disableQuiz }"
+              v-on:click.stop
+            >
               <div
                 class="quiz-item"
                 v-for="item in randomPokemonsList"
@@ -33,30 +60,10 @@
               </div>
             </div>
           </div>
+          <div v-else>
+            <preloader :loading="true" />
+          </div>
         </transition>
-      </div>
-
-      <!--Right-->
-      <div class="col-md-4">
-        <div class="score">
-          <h1>Game Info</h1>
-          <table class="table table-borderless my-3">
-            <tbody>
-              <tr>
-                <th class="pl-0 w-25" scope="row">Player:</th>
-                <td>{{ playerName || "Guest" }}</td>
-              </tr>
-              <tr>
-                <th class="pl-0 w-25" scope="row">Score:</th>
-                <td>{{ score }}</td>
-              </tr>
-              <tr>
-                <th class="pl-0 w-25" scope="row">Progress:</th>
-                <td>{{ progress }} / {{ totalMoves }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
     </div>
   </div>
@@ -64,8 +71,12 @@
 
 <script>
 import * as pokemon from "@/services/pokemon.service";
+import Preloader from "./Preloader";
 
 export default {
+  components: {
+    Preloader,
+  },
   data() {
     return {
       currentPokemon: {},
@@ -74,6 +85,8 @@ export default {
       hidePokemon: true,
       showCorrectAnswer: false,
       allDataIsReady: false,
+      loading: false,
+      disableQuiz: false,
     };
   },
 
@@ -115,10 +128,12 @@ export default {
         );
         this.$store.dispatch("increaseProgress", this.progress + 1);
         this.allDataIsReady = true;
+        this.disableQuiz = false;
       }, 1000);
     },
 
     validateMove(id) {
+      this.disableQuiz = true;
       let isCorrect = pokemon.validateMove(this.currentPokemon.id, id);
       this.hidePokemon = false;
       this.showCorrectAnswer = true;
@@ -126,7 +141,7 @@ export default {
       if (isCorrect) {
         this.$store.dispatch("increaseScore", this.score + 1);
       }
-      this.nextQuiz();
+      return this.nextQuiz();
     },
 
     nextQuiz() {
@@ -137,7 +152,7 @@ export default {
           this.resetQuestion();
           this.startGame();
         }
-      }, 2000);
+      }, 3000);
     },
 
     resetQuestion() {

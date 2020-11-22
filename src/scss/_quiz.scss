@@ -58,6 +58,10 @@
   cursor: pointer;
 }
 
+.disableQuiz {
+  pointer-events: none;
+}
+
 .quiz-item:hover {
   box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
 }
@@ -77,8 +81,17 @@
   filter: brightness(0) blur(0.8px);
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 768px) {
   .score {
-    display: none;
+    text-align: center;
+  }
+
+  .score tbody {
+    font-size: 0.8em;
+  }
+
+  .score .table th,
+  .table td {
+    padding: 0;
   }
 }
